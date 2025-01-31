@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: "Work Sans", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.sidenav {
+    height: 100%; 
+    position: fixed; 
+    z-index: 1; 
+    top: 0; 
+    left: 0; 
+    background-color:#232323; 
+    transition: .5s ease; 
+    overflow-x: hidden; 
+    padding-top: 20px; 
+}
+
+.sidenav a {
+    text-decoration: none;
+    color: #818181;
+    transition: transform 0.1s ease-in-out;
+    font-size: 1.7rem;
+    margin: 10px 0;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+    transform: scale(1.2);
+}
+
+.sidenav a.active {
+    color: #f1f1f1;
+}
+
+
+.open-menu-button {
+    font-size: 2.5rem;
+    border: none;
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #232323;
+    transition: transform 0.1s ease-in-out;
+    margin: 10px;
+}
+
+.open-menu-button:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.close-menu-button {
+    font-size: 2.5rem;
+    border: none;
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #f1f1f1;
+    transition: transform 0.1s ease-in-out;
+}
+
+.close-menu-button:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.sidenav-close-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
