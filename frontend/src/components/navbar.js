@@ -16,7 +16,10 @@ const Navbar = () => {
 
     return (
         <div>
-            <button onClick={openSidenav} className="open-menu-button"><IoMenu /></button>
+            <div className="navbar-menu">
+                <button onClick={openSidenav} className="open-menu-button"><IoMenu /></button>
+                <h1>gameRecord</h1>
+            </div>
             <div className="sidenav" style={{width: width}}>
                 <div className="sidenav-close-button">
                     <button onClick={closeSidenav} className="close-menu-button"><IoMdArrowRoundBack /></button>
