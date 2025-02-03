@@ -1,8 +1,11 @@
 import React , {useState}from "react";
 import { IoMenu } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+
+    const { user } = useAuth();
 
     const [width, setWidth] = useState('0%');
 
@@ -28,6 +31,7 @@ const Navbar = () => {
                 <a href="/search">Search</a>
                 <a href="/mygames">My Games</a>
                 <a href="/profile">Profile</a>
+                {user ? <a href="/logout">Logout</a> : <a href="/login">Login / Register</a>}
             </div>
         </div>
         

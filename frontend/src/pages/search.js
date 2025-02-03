@@ -1,31 +1,8 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+import useSearchGames from "../hooks/searchHooks";
 
 const Search = () => {
-    const [games, setGames] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    // Function to fetch games when the button is clicked
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return; // Prevent empty searches
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await axios.get("http://localhost:5000/api/games", {
-                params: { search: searchQuery },
-            });
-
-            setGames(response.data);
-        } catch (err) {
-            setError("Failed to fetch games");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { games, searchQuery, setSearchQuery, handleSearch, loading, error } = useSearchGames();
 
     return (
         <div className="search-page">

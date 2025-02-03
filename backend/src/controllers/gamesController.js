@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'c91e07b6fecf411586c31fbc5324b81d';
+const API_KEY = process.env.RAWG_API_KEY;
 const BASE_URL = 'https://api.rawg.io/api/games';
 
 const searchGame = async (req, res) => {
@@ -17,7 +17,8 @@ const searchGame = async (req, res) => {
 
         res.json(response.data.results); // Send results to the client
     } catch (error) {
-        res.status(500).json({ error: error.response?.data || error.message });
+        console.error("Error fetching games:", error.response?.data || error.message);
+        res.status(500).json({ error: "Failed to fetch games. Please try again later." });
     }
 };
 

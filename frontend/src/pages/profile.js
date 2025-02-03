@@ -1,10 +1,14 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
+import ProfileLoggedIn from "./profileLoggedIn";
+import ProfileLoggedOut from "./profileLoggedOut";
 
 const Profile = () => {
-    <div>
-        <h1>Profile</h1>
-        
-    </div>
+  const { user, loading } = useAuth();
+
+  if (loading) return <p>Loading...</p>;
+
+  return user ? <ProfileLoggedIn user={user} /> : <ProfileLoggedOut />;
 };
 
 export default Profile;
