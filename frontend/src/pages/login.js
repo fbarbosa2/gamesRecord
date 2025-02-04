@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../auth/authContext";
 import { FaGoogle } from "react-icons/fa";
 import Alert from "../components/alert";
-import { useEmailLogin, useLogout } from "../auth/authHooks";
+import { useEmailLogin, useLogout, useGoogleLogin } from "../auth/authHooks";
 
 const Login = () => {
     const { user } = useAuth();
@@ -16,19 +16,35 @@ const Login = () => {
     const { handleEmailLogin, error, loading } = useEmailLogin();
     const { handleLogout } = useLogout();
 
+    const { handleGoogleLogin, errorG, loadingG } = useGoogleLogin();
+
     // Handle form submission
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
-        await handleEmailLogin(email, password); // Pass email & password as arguments
+        await handleEmailLogin(email, password);
 
         if (!error) {
             setAlertMessage("User logged in successfully");
             setAlertType("success");
-            //setTimeout(() => {
-                //window.location.href = "/";
-            //}, 1500); // Redirect after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1500);
         } else {
             setAlertMessage(error);
+            setAlertType("error");
+        }
+    };
+
+    const handleGoogleLoginPage = async () => {
+        await handleGoogleLogin();
+        if(!errorG){
+            setAlertMessage("User logged in successfully");
+            setAlertType("success");
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1500);
+        } else {
+            setAlertMessage(errorG);
             setAlertType("error");
         }
     };
@@ -65,7 +81,7 @@ const Login = () => {
                     </button>
                 </form>
 
-                <button><FaGoogle /> Login with Google</button>
+                <button onClick={handleGoogleLoginPage}><FaGoogle /> Login with Google</button>
                 <a href="/register">Don't have an account?</a>
 
                 {alertMessage && <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />}

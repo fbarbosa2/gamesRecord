@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../data/firebase";
 
@@ -22,6 +22,27 @@ const useEmailLogin = () => {
     };
 
     return { handleEmailLogin, error, loading };
+};
+
+const useGoogleLogin = () => {
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleGoogleLogin = async () => {
+        setLoading(true);
+        setError(null);
+        try{
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            setLoading(false);
+
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+
+    return { handleGoogleLogin, error, loading };
 };
 
 // Custom Hook for Logout
@@ -71,7 +92,6 @@ const useRegister = () => {
             });
 
             setLoading(false);
-            window.location.href = "/"; // Redirect after successful registration
         } catch (error) {
             setError(error.message);
             setLoading(false);
@@ -81,4 +101,4 @@ const useRegister = () => {
     return { handleRegister, error, loading };
 };
 
-export { useEmailLogin, useLogout, useRegister };
+export { useEmailLogin, useLogout, useRegister, useGoogleLogin };
