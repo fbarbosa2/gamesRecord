@@ -205,3 +205,39 @@ body {
 .alert-error {
     background-color: #f44336;
 }
+
+.my-games {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin: 40px 60px;
+    
+}
+
+.my-game-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    border-radius: 5px;
+    border: #232323 1px solid;
+    transition: transform 0.1s ease-in-out;
+}
+
+.my-game-card:hover {
+    transform: scale(1.1);
+}
+
+.my-game-card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+    border: none;
+}
+
+#my-games-header {
+    font-size: 2rem;
+    margin: 40px;
+}

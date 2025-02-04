@@ -25,7 +25,7 @@ const Register = () => {
             setAlertMessage("User registered successfully");
             setAlertType("success");
             setTimeout(() => {
-                window.location.href = "/login";
+                window.location.href = "/";
             }, 1500);
         } else {
             setAlertMessage(error);

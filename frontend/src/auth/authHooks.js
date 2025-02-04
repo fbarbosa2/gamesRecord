@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../data/firebase";
 
 // Custom Hook for Email Login
@@ -14,7 +14,6 @@ const useEmailLogin = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             setLoading(false);
-            window.location.href = "/";
         } catch (error) {
             setError(error.message);
             setLoading(false);
@@ -31,11 +30,26 @@ const useGoogleLogin = () => {
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError(null);
-        try{
+        try {
             const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
-            setLoading(false);
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
 
+            // Reference to the user's document in Firestore
+            const userDocRef = doc(db, "users", user.uid);
+            const userSnapshot = await getDoc(userDocRef);
+
+            // If the document doesn't exist, create it
+            if (!userSnapshot.exists()) {
+                await setDoc(userDocRef, {
+                    username: user.displayName || "Google User",
+                    email: user.email,
+                    dateCreated: new Date().toISOString(),
+                    favoriteGames: []
+                });
+            }
+
+            setLoading(false);
         } catch (error) {
             setError(error.message);
             setLoading(false);
