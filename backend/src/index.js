@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors'; // Import CORS
 import gamesRoutes from './routes/routes.js';
 import './config/firebase.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -18,7 +20,7 @@ app.use(cors({
 // Use the imported routes with /api prefix
 app.use('/api', gamesRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

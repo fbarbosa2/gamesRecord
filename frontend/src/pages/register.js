@@ -1,21 +1,40 @@
-import {React, useState} from "react";
-import UseRegister from "../hooks/registerHooks";
+import React, { useState } from "react";
+import { useRegister } from "../auth/authHooks";
+import Alert from "../components/alert";
 
 const Register = () => {
-
-    const { registerUser, loading, error } = UseRegister();
+    const { handleRegister, loading, error } = useRegister();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await registerUser(email, password, confirmPassword);
-        if (result) {
-            // Handle successful registration (e.g., redirect to login page)
-            //console.log("User registered successfully:", result);
-            console.log("user registered");
+
+        if (password !== confirmPassword) {
+            setAlertMessage("Passwords do not match");
+            setAlertType("error");
+            return;
         }
+
+        await handleRegister(email, password, confirmPassword);
+
+        if (!error) {
+            setAlertMessage("User registered successfully");
+            setAlertType("success");
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 1500);
+        } else {
+            setAlertMessage(error);
+            setAlertType("error");
+        }
+    };
+
+    const handleCloseAlert = () => {
+        setAlertMessage("");
     };
 
     return (
@@ -23,12 +42,35 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
                 <h1>Register</h1>
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" name="email" required onChange={(e) => setEmail(e.target.value)}/>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)}
+                />
                 <label htmlFor="password">Password:</label>
-                <input type="password" id="password" name="password" required onChange={(e) => setPassword(e.target.value)}/>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
+                />
                 <label htmlFor="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required onChange={(e) => setConfirmPassword(e.target.value)}/>
-                <button type="submit" >Register</button>
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword" 
+                    required 
+                    value={confirmPassword} 
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button type="submit" disabled={loading}>Register</button>
+                {loading && <p>Loading...</p>}
+                <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />
             </form>
             <a href="/login">Already have an account?</a>
         </div>

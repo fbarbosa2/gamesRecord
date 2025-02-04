@@ -1,36 +1,83 @@
-import React from "react";
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from "react";
+import { useAuth } from "../auth/authContext";
 import { FaGoogle } from "react-icons/fa";
+import Alert from "../components/alert";
+import { useEmailLogin, useLogout } from "../auth/authHooks";
 
 const Login = () => {
     const { user } = useAuth();
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState("");
+    
+    // Manage email & password state inside the component
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleLogout = () => {
-        
+    const { handleEmailLogin, error, loading } = useEmailLogin();
+    const { handleLogout } = useLogout();
+
+    // Handle form submission
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        await handleEmailLogin(email, password); // Pass email & password as arguments
+
+        if (!error) {
+            setAlertMessage("User logged in successfully");
+            setAlertType("success");
+            //setTimeout(() => {
+                //window.location.href = "/";
+            //}, 1500); // Redirect after 1.5 seconds
+        } else {
+            setAlertMessage(error);
+            setAlertType("error");
+        }
     };
 
-    if(!user){
-        return(
+    // Function to close alert
+    const handleCloseAlert = () => {
+        setAlertMessage("");
+        setAlertType("");
+    };
+
+    if (!user) {
+        return (
             <div>
                 <h1>Login</h1>
-                <form>
-                    <label>Username</label>
-                    <input type="text" name="username" />
+                <form onSubmit={handleLoginSubmit}>
+                    <label>Email</label>
+                    <input 
+                        type="email" 
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required 
+                    />
                     <label>Password</label>
-                    <input type="password" name="password" />
-                    <button type="submit">Login</button>
+                    <input 
+                        type="password" 
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required 
+                    />
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Logging in..." : "Login"}
+                    </button>
                 </form>
+
                 <button><FaGoogle /> Login with Google</button>
                 <a href="/register">Don't have an account?</a>
+
+                {alertMessage && <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />}
             </div>
         );
     } else {
-        return(
+        return (
             <div>
-                <h1>Hi {user.email} ! You are already logged in please log out to change to another account</h1>
+                <h1>Hi {user.username}! You are already logged in. Please log out to change accounts.</h1>
                 <button onClick={handleLogout}>Logout</button>
             </div>
-            );
+        );
     }
 };
 

@@ -1,7 +1,8 @@
 import React , {useState}from "react";
 import { IoMenu } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../auth/authContext";
+import { useLogout } from "../auth/authHooks";
 
 const Navbar = () => {
 
@@ -17,6 +18,8 @@ const Navbar = () => {
         setWidth('0%');
     };
 
+    const { handleLogout } = useLogout();
+
     return (
         <div>
             <div className="navbar-menu">
@@ -31,7 +34,7 @@ const Navbar = () => {
                 <a href="/search">Search</a>
                 <a href="/mygames">My Games</a>
                 <a href="/profile">Profile</a>
-                {user ? <a href="/logout">Logout</a> : <a href="/login">Login / Register</a>}
+                {user ? <a onClick={handleLogout}>Logout</a> : <a href="/login">Login / Register</a>}
             </div>
         </div>
         
