@@ -1,9 +1,11 @@
 import React from "react";
 import useSearchGames from "../hooks/searchHooks";
+import { useAuth } from "../auth/authContext";
 
 const Search = () => {
     const { games, searchQuery, setSearchQuery, handleSearch, loading, error } = useSearchGames();
 
+    const { user } = useAuth();
     return (
         <div className="search-page">
             <h1>Search</h1>
@@ -27,7 +29,7 @@ const Search = () => {
                         <img src={game.background_image} alt={game.name} />
                         <h2>{game.name}</h2>
                         <p>{game.description || "No description available."}</p>
-                        <button className="add-game-button" onClick={""}>+ Add to your games</button>
+                        {user ? <button className="add-game-button" onClick={""}>+ Add to your games</button> : null}
                     </div>
                 ))}
             </div>
