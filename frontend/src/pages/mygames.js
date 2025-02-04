@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUserGames } from "../data/userData";
 import { useAuth } from "../auth/authContext";
+import { CiStar } from "react-icons/ci";
 
 const MyGames = () => {
     const { user } = useAuth();
@@ -39,6 +40,8 @@ const MyGames = () => {
                             <img src={game.background_image} alt={game.name} />
                             <h2>{game.name}</h2>
                             <p>{game.description}</p>
+                            <p>Your Rating: {game.rating} <CiStar /></p>
+                            <p>Finished: {game.finished ? "Yes" : "No"}</p>
                         </div>
                     ))
                 ) : (
