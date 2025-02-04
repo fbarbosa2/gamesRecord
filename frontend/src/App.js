@@ -7,6 +7,7 @@ import Profile from './pages/profile';
 import Navbar from './components/navbar';
 import Login from './pages/login';
 import Register from './pages/register';
+import GameDetails from './pages/gameDetails';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/game/:gameId" element={<GameDetails />} />
         </Routes>
       </Router>
     </AuthProvider>
