@@ -8,11 +8,18 @@ import Navbar from './components/navbar';
 import Login from './pages/login';
 import Register from './pages/register';
 import GameDetails from './pages/gameDetails';
+import { Canvas } from "@react-three/fiber";
+import MovingStars from "./components/stars";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <div className="canvas-container">
+          <Canvas>
+            <MovingStars />
+          </Canvas>
+        </div>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
