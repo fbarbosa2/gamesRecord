@@ -14,9 +14,17 @@ const useEmailLogin = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             setLoading(false);
+            return { success: true };
         } catch (error) {
-            setError(error.message);
             setLoading(false);
+            let errorMessage = "Error logging in. Please try again later.";
+            if (error.code === "auth/invalid-credential") {
+                errorMessage = "Invalid email or password.";
+            } else if (error.code === "auth/user-disabled") {
+                errorMessage = "Your account is disabled please contact an admin for help.";
+            }
+            setError(errorMessage);
+            return { error: errorMessage };
         }
     };
 
@@ -42,7 +50,7 @@ const useGoogleLogin = () => {
             // If the document doesn't exist, create it
             if (!userSnapshot.exists()) {
                 await setDoc(userDocRef, {
-                    username: user.displayName || "Google User",
+                    username: user.displayName || "New User",
                     email: user.email,
                     dateCreated: new Date().toISOString(),
                     favoriteGames: []
@@ -89,11 +97,6 @@ const useRegister = () => {
         setLoading(true);
         setError(null);
         try {
-            if(password !== confirmPassword) {
-                setLoading(false);
-                setError("Passwords do not match");
-                return;
-            }
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             
@@ -106,9 +109,19 @@ const useRegister = () => {
             });
 
             setLoading(false);
+            return { success: true };
         } catch (error) {
-            setError(error.message);
             setLoading(false);
+            let errorMessage = "Error registering. Please try again later.";
+            if (error.code === "auth/email-already-in-use") {
+                errorMessage = "Email is already in use.";
+            } else if (error.code === "auth/invalid-email") {
+                errorMessage = "Invalid email address.";
+            } else if (error.code === "auth/weak-password") {
+                errorMessage = "Password is too weak.";
+            }
+            setError(errorMessage);
+            return { error: errorMessage };
         }
     };
 

@@ -11,8 +11,11 @@ const MyGames = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user) return; // Don't fetch if no user
-
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+    
         const fetchGames = async () => {
             try {
                 const userGames = await getUserGames(user.uid);
@@ -23,12 +26,12 @@ const MyGames = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchGames();
-    }, [user]); // Runs when `user` changes
+    }, [user]);
 
     if (loading) return <p>Loading...</p>;
-
+    if(!user) return <p id="logout-mygames-p">Please log in to view your games.</p>;
     return (
         <div>
             <div id="my-games-header">

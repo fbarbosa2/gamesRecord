@@ -33,12 +33,19 @@ const Register = () => {
         }
     
         try {
-            await handleRegister(email, password);
-            addNotification("Registration successful! Redirecting to home page...", "success");
+            let result = await handleRegister(email, password);
+
+            if (result.error) {
+                addNotification(result.error, "error");
+                return; 
+            } else {
+                addNotification("Registration successful! Redirecting to home page...", "success");
     
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 1500);
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1500);
+            }
+
         } catch (err) {
             addNotification("Error registering: " + err.message, "error");
         }
@@ -49,7 +56,7 @@ const Register = () => {
             window.location.href = "/";
         }
     }, [user]);
-    
+
     return (
         <div className="register-login-notification">
             <SlideInNotifications notifications={notifications} removeNotif={removeNotif} />
