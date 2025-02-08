@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "../auth/authContext";
 import { FaGoogle } from "react-icons/fa";
-import Alert from "../components/alert";
 import { useEmailLogin, useLogout, useGoogleLogin } from "../auth/authHooks";
+import SlideInNotifications from "../components/notification";
 
 const Login = () => {
     const { user } = useAuth();
-    const [alertMessage, setAlertMessage] = useState("");
-    const [alertType, setAlertType] = useState("");
+    const [notifications, setNotifications] = useState([]);
     
     // Manage email & password state inside the component
     const [email, setEmail] = useState("");
@@ -21,70 +20,73 @@ const Login = () => {
     // Handle form submission
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
-        await handleEmailLogin(email, password);
 
-        if (!error) {
-            setAlertMessage("User logged in successfully");
-            setAlertType("success");
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 1500);
+        if(!email || !password) {
+            addNotification("Please fill in all fields", "error");
         } else {
-            setAlertMessage(error);
-            setAlertType("error");
+            try{
+                await handleEmailLogin(email, password);
+                addNotification("Logged in successfully", "success");
+                window.location.href = "/";
+            } catch (error) {
+                addNotification("Error logging in: " + error.message, "error");
+            }
         }
+        
+            
     };
 
     const handleGoogleLoginPage = async () => {
-        await handleGoogleLogin();
-        if(!errorG){
-            setAlertMessage("User logged in successfully");
-            setAlertType("success");
+        try{
+            await handleGoogleLogin();
+            addNotification("Logged in successfully", "success");
             setTimeout(() => {
                 window.location.href = "/";
             }, 1500);
-        } else {
-            setAlertMessage(errorG);
-            setAlertType("error");
+        } catch (error) {
+            addNotification("Error logging in: " + error.message, "error");
         }
+                
     };
 
-    // Function to close alert
-    const handleCloseAlert = () => {
-        setAlertMessage("");
-        setAlertType("");
+    const addNotification = (text, type) => {
+        const id = Date.now();
+        setNotifications((prev) => [{ id, text, type }, ...prev]);
+    };
+
+    const removeNotif = (id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
     };
 
     if (!user) {
         return (
-            <div>
-                <h1>Login</h1>
-                <form onSubmit={handleLoginSubmit}>
-                    <label>Email</label>
-                    <input 
-                        type="email" 
-                        name="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required 
-                    />
-                    <label>Password</label>
-                    <input 
-                        type="password" 
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required 
-                    />
-                    <button type="submit" disabled={loading}>
-                        {loading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
+            <div className="register-login-notification">
+                <SlideInNotifications notifications={notifications} removeNotif={removeNotif} />
+                <div className="register-login-page">
+                    <h1>Login</h1>
+                    <form className="register-login-form" onSubmit={handleLoginSubmit}>
+                        <label>Email</label>
+                        <input 
+                            type="email" 
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <label>Password</label>
+                        <input 
+                            type="password" 
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <button className="register-login-button" type="submit" disabled={loading}>
+                            {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </form>
 
-                <button onClick={handleGoogleLoginPage}><FaGoogle /> Login with Google</button>
-                <a href="/register">Don't have an account?</a>
-
-                {alertMessage && <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />}
+                    <button className="google-login-button" onClick={handleGoogleLoginPage}><FaGoogle /> Login with Google</button>
+                    <a href="/register">Don't have an account?</a> 
+                </div>
             </div>
         );
     } else {

@@ -92,6 +92,12 @@ const updateGameDetails = async (uid, gameId, updatedData) => {
 
 const updateUserDetails = async (uid, user) => {
     try{
+        const userDoc = doc(db, "users, uid");
+        const userDocSnap = await getDoc(userDoc);
+        if(userDocSnap.exists()){
+            await updateDoc(userDoc, user);
+            console.log("User details updated successfully!");
+        }
 
     } catch (error) {
         console.error("Error updating user details: ", error);

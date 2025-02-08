@@ -47,7 +47,7 @@ const MyGames = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No games saved yet.</p>
+                    <p id="no-games-saved-p">No games saved yet :(</p>
                 )}
             </div>
         </div>

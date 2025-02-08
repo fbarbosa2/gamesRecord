@@ -1,12 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import { useAuth } from "../auth/authContext";
+import SlideInNotifications from "../components/notification";
 
 const ProfileLoggedIn = () => {
     const { user } = useAuth();
+    const [notifications, setNotifications] = useState([]);
 
     if (!user) {
         return <p>Loading user data...</p>;
     }
+
+    const handleEditProfile = () => {
+        try {
+
+
+        } catch (error) {
+            addNotification("Error editing profile: " + error.message, "error");
+        }
+    };
+
+    const addNotification = (text, type) => {
+        const id = Date.now();
+        setNotifications((prev) => [{ id, text, type }, ...prev]);
+    };
+
+    const removeNotif = (id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    };
 
     return (
         <div>
@@ -14,6 +34,8 @@ const ProfileLoggedIn = () => {
             <h3>Username: {user.username || "Unknown"}</h3>
             <p>Email: {user.email}</p>
             <p>Account Age: {calculateAccountAge(user.dateCreated)} days</p>
+            <button onClick={handleEditProfile}>Edit Profile</button>
+            <SlideInNotifications notifications={notifications} removeNotif={removeNotif} />
         </div>
     );
 };

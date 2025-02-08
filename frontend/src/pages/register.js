@@ -1,78 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRegister } from "../auth/authHooks";
-import Alert from "../components/alert";
+import SlideInNotifications from "../components/notification";
+import { useAuth } from "../auth/authContext";
 
 const Register = () => {
     const { handleRegister, loading, error } = useRegister();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [alertMessage, setAlertMessage] = useState("");
-    const [alertType, setAlertType] = useState("");
+    const [notifications, setNotifications] = useState([]);
+    const { user } = useAuth();
+
+    const addNotification = (text, type) => {
+        const id = Date.now();
+        setNotifications((prev) => [{ id, text, type }, ...prev]);
+    };
+
+    const removeNotif = (id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (password !== confirmPassword) {
-            setAlertMessage("Passwords do not match");
-            setAlertType("error");
+    
+        if (!email || !password || !confirmPassword) {
+            addNotification("Please fill in all fields", "error");
             return;
         }
-
-        await handleRegister(email, password, confirmPassword);
-
-        if (!error) {
-            setAlertMessage("User registered successfully");
-            setAlertType("success");
+        if (password !== confirmPassword) {
+            addNotification("Passwords do not match", "error");
+            return;
+        }
+    
+        try {
+            await handleRegister(email, password);
+            addNotification("Registration successful! Redirecting to home page...", "success");
+    
             setTimeout(() => {
                 window.location.href = "/";
             }, 1500);
-        } else {
-            setAlertMessage(error);
-            setAlertType("error");
+        } catch (err) {
+            addNotification("Error registering: " + err.message, "error");
         }
     };
-
-    const handleCloseAlert = () => {
-        setAlertMessage("");
-    };
-
+    
+    useEffect(() => {
+        if (user) {
+            window.location.href = "/";
+        }
+    }, [user]);
+    
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Register</h1>
-                <label htmlFor="email">Email:</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    required 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <label htmlFor="password">Password:</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    required 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <label htmlFor="confirmPassword">Confirm Password:</label>
-                <input 
-                    type="password" 
-                    id="confirmPassword" 
-                    name="confirmPassword" 
-                    required 
-                    value={confirmPassword} 
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <button type="submit" disabled={loading}>Register</button>
-                {loading && <p>Loading...</p>}
-                <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />
-            </form>
-            <a href="/login">Already have an account?</a>
+        <div className="register-login-notification">
+            <SlideInNotifications notifications={notifications} removeNotif={removeNotif} />
+        
+            <div className="register-login-page">
+                <form onSubmit={handleSubmit} className="register-login-form">
+                    <h1>Register</h1>
+                    <label htmlFor="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <label htmlFor="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        
+                        value={confirmPassword} 
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button className="register-login-button" type="submit" disabled={loading}>Register</button>
+                    {loading && <p>Loading...</p>}
+                </form>
+                <a href="/login">Already have an account?</a>
+            </div>
         </div>
     );
 };

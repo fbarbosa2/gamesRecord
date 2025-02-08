@@ -24,7 +24,7 @@ const Navbar = () => {
         <div>
             <div className="navbar-menu">
                 <button onClick={openSidenav} className="open-menu-button"><IoMenu /></button>
-                <h1>gameRecord</h1>
+                <h1>Game Universe</h1>
             </div>
             <div className="sidenav" style={{width: width}}>
                 <div className="sidenav-close-button">

@@ -7,7 +7,7 @@ body {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    background-color: #232323;
+    background-color: #000814;
     color: #f1f1f1;
 }
 
@@ -256,19 +256,94 @@ body {
     margin: 40px;
 }
 
-.starfield {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background: black;
-    overflow: hidden;
-  }
+.register-login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #232323;
+    width: 100%;
+    max-width: 500px; /* Set a max-width for better responsiveness */
+    padding: 30px;
+    margin: 50px auto;
+    border-radius: 10px;
+}
+
+.register-login-page a {
+    text-decoration: none;
+    color: white;
+    padding-bottom: 20px;
+}
+
+.register-login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    font-family: inherit;
+}
+
+.register-login-form input {
+    font-family: inherit;
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.register-login-button {
+    font-family: inherit;
+    font-size: large;
+    color: black;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 10px auto;
+}
+
+.google-login-button {
+    font-family: inherit;
+    font-size: large;
+    color: black;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0 auto 15px auto;
+}
+
+.register-login-button:hover {
+    background-color: #f0f0f0;
+}
+
+.register-login-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.register-login-button:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+#home-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px;
+    font-size: 2rem;
+}
+
+#no-games-saved-p {
+    font-size: 1.5rem;
+    margin: 20px;
+}
   
-  .star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.2s ease-out;
-  }

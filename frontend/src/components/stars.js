@@ -15,7 +15,7 @@ const MovingStars = () => {
 
     return (
         <group ref={starsRef}>
-            <Stars radius={50} count={5000} factor={4} fade />
+            <Stars radius={50} count={5000} factor={4} saturation={0} fade speed={1}/>
         </group>
     );
 };
