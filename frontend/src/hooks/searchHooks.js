@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://your-app-name.onrender.com"; // Replace with your actual Render URL
+const API_BASE_URL = "https://gamesrecord.onrender.com"; // Replace with your actual Render URL
 
 const handleSearch = async () => {
     if (!searchQuery.trim()) return; // Prevent empty searches
