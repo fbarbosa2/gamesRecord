@@ -12,15 +12,16 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 
 // Enable CORS for all frontend requests
 app.use(cors({
-    origin: "http://localhost:3000", // Allow only your frontend (React)
-    methods: ["GET", "POST"],
+    origin: ["http://localhost:3000", "gamerecord-5e84e.web.app"], // Allow only frontend (React) LOCALHOST
+    methods: ["GET"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
 
 // Use the imported routes with /api prefix
 app.use('/api', gamesRoutes);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
