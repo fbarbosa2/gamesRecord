@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'; // Import CORS
 import gamesRoutes from './routes/routes.js';
-import './config/firebase.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
