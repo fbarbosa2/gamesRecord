@@ -13,7 +13,7 @@ const searchGame = async (req, res) => {
             params: {
                 key: API_KEY,
                 search: search || '',
-                page_size: 10, // Number of results per page
+                page_size: 15, // Number of results per page
             }
         });
 
