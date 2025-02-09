@@ -11,7 +11,7 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 
 // Enable CORS for all frontend requests
 app.use(cors({
-    origin: ["http://localhost:3000", "gamerecord-5e84e.web.app"], // Allow only frontend (React) LOCALHOST
+    origin: ["http://localhost:3000", "https://gamerecord-5e84e.web.app"], // Allow only frontend (React) LOCALHOST
     methods: ["GET"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
