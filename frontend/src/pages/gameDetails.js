@@ -44,12 +44,12 @@ const GameDetails = () => {
     if (!game) return <p>Game not found.</p>; // Handle case where game isn't found
 
     return (
-        <div>
+        <div id="game-details">
             <h1>{game.name}</h1>
             <img src={game.background_image} alt={game.name} />
             <p>{game.description}</p>
             
-            <form onSubmit={handleSaveChanges}>
+            <form id="game-details-form" onSubmit={handleSaveChanges}>
                 <label htmlFor="finished">Finished:</label>
                 <input 
                     type="checkbox" 

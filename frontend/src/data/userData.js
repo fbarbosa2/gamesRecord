@@ -2,18 +2,19 @@ import { arrayUnion, arrayRemove, doc, updateDoc, getDoc } from "firebase/firest
 import { db } from "./firebase";
 
 const addGametoUser = async (uid, game) => {
-    try{
+    try {
         const userDoc = doc(db, "users", uid);
 
         await updateDoc(userDoc, {
             favoriteGames: arrayUnion(game)
         });
-        console.log("Game added to user: ", game);
+        return { success: true, game };
     } catch (error) {
         console.error("Error adding game to user: ", error);
+        return { error: error.message };
     };
-    
 };
+
 
 const removeGamefromUser = async (uid, game) => {
     try{
@@ -30,19 +31,23 @@ const removeGamefromUser = async (uid, game) => {
 };
 
 const getUserGames = async (uid) => {
-    try{
-        const userDoc = doc(db,"users", uid);
+    try {
+        const userDoc = doc(db, "users", uid);
         const userDocSnap = await getDoc(userDoc);
+
         if (userDocSnap.exists()) {
             const docData = userDocSnap.data();
             return docData.favoriteGames || [];
-          } else {
+        } else {
             console.log("Could not find user document!");
-          }
+            return [];
+        }
     } catch (error) {
         console.error("Error getting user games: ", error);
-    };
+        throw new Error("Failed to fetch user games"); // Throw an error if something goes wrong
+    }
 };
+
 
 const getUserGameById = async (uid, gameId) => {
     try{
@@ -90,12 +95,12 @@ const updateGameDetails = async (uid, gameId, updatedData) => {
     }
 };
 
-const updateUserDetails = async (uid, user) => {
+const updateUserDetails = async (uid, username) => {
     try{
         const userDoc = doc(db, "users, uid");
         const userDocSnap = await getDoc(userDoc);
         if(userDocSnap.exists()){
-            await updateDoc(userDoc, user);
+            await updateDoc(userDoc, username);
             console.log("User details updated successfully!");
         }
 
